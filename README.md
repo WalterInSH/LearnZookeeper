@@ -1,4 +1,6 @@
 learnzookeeper
 ---
-CRUD.java shows the basic crud operations between java client and zookeeper servers
+CRUD.java shows the basic CRUD operations between java client and zookeeper servers
+
+WatcherSample shows how to use watchers
 
