@@ -4,7 +4,7 @@ import org.apache.zookeeper.*;
  * 演示 Node操作的API
  * Created by zhangkai on 8/3/14.
  */
-public class CRUDTest {
+public class CRUD {
 
     public static void main(String[] args) throws Exception {
         // 创建一个与服务器的连接

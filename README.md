@@ -1,4 +1,4 @@
 learnzookeeper
 ---
-CRUDTest.java shows the basic crud operations between java client and zookeeper servers
+CRUD.java shows the basic crud operations between java client and zookeeper servers
 
