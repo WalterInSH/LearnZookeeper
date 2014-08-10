@@ -1,3 +1,5 @@
+
+package me.faolou.learnzookeeper.basic;
 import org.apache.zookeeper.*;
 
 /**
