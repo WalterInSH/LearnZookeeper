@@ -1,5 +1,6 @@
 
 package me.faolou.learnzookeeper.basic;
+import org.apache.curator.test.TestingServer;
 import org.apache.zookeeper.*;
 
 /**
@@ -20,7 +21,8 @@ public class WatcherSample {
                         event.getState());
             }
         };
-        ZooKeeper zk = new ZooKeeper("127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183",3000, watcher);
+        TestingServer server = new TestingServer();
+        ZooKeeper zk = new ZooKeeper(server.getConnectString(),3000, watcher);
 
         // set a watcher
         zk.exists("/testNode",true);
@@ -47,5 +49,6 @@ public class WatcherSample {
 
         zk.delete("/testNode",-1);
         zk.close();
+        server.stop();
     }
 }

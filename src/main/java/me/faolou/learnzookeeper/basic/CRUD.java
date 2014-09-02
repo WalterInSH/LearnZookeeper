@@ -1,5 +1,6 @@
 package me.faolou.learnzookeeper.basic;
 
+import org.apache.curator.test.TestingServer;
 import org.apache.zookeeper.*;
 
 /**
@@ -10,7 +11,8 @@ public class CRUD {
 
     public static void main(String[] args) throws Exception {
         // 创建一个与服务器的连接
-        ZooKeeper zk = new ZooKeeper("127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183",
+        TestingServer server = new TestingServer();
+        ZooKeeper zk = new ZooKeeper(server.getConnectString(),
                 3000, new Watcher() {
             public void process(WatchedEvent event) {
             }
@@ -42,5 +44,7 @@ public class CRUD {
         zk.delete("/testRootPath", -1);
         // 关闭连接
         zk.close();
+
+        server.stop();
     }
 }

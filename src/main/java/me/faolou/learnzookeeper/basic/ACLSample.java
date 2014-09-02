@@ -1,6 +1,7 @@
 package me.faolou.learnzookeeper.basic;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.curator.test.TestingServer;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
@@ -28,9 +29,11 @@ public class ACLSample {
                         event.getState());
             }
         };
-        ZooKeeper zk = new ZooKeeper("127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183", 3000, watcher);
+        TestingServer server = new TestingServer();
+        ZooKeeper zk = new ZooKeeper(server.getConnectString(), 3000, watcher);
 
         zk.close();
+        server.stop();
     }
 
     class NameStartsWithAAuthenticationProvider implements AuthenticationProvider{
