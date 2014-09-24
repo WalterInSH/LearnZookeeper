@@ -10,18 +10,16 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.curator.test.TestingServer;
 import org.apache.zookeeper.data.Stat;
 
-import java.util.List;
-
 import static java.lang.Thread.sleep;
 
 /**
  * 1. getData如果不存在ZNode, 则抛KeeperException$NoNodeException
  * 使用inbackground则不抛异常
- *
+ * <p/>
  * 2. create如果创建不存在的父节点下的子节点, 也会抛异常,
  * 使用inbackground则不抛,
  * 使用creatingParentsIfNeeded则可以成功创建
- *
+ * <p/>
  * 3. 尝试获取inbackground crete或者set的数据, 则会失败
  *
  * @author jack.zhang
@@ -61,7 +59,7 @@ public class CuratorCRUDInbackgroundSample {
         /*后台线程利用future做的, sleep一会他就做完了*/
         sleep(500);
         byte[] bytes2 = client.getData().forPath("/node");
-        System.out.println(new String(bytes2));
+        System.out.println(new String(bytes2) + new String(bytes1));
 
         /*exist没啥好说的*/
         Stat stat = client.checkExists().forPath("/node/1");
