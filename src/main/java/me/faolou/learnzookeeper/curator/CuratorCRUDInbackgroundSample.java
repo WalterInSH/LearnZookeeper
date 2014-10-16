@@ -29,6 +29,9 @@ public class CuratorCRUDInbackgroundSample {
     public static void main(String[] args) throws Exception {
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3);
         TestingServer server = new TestingServer();
+
+        //使用local
+//        CuratorFramework client = CuratorFrameworkFactory.newClient("127.0.0.1:2181", retryPolicy);
         CuratorFramework client = CuratorFrameworkFactory.newClient(server.getConnectString(), retryPolicy);
         client.start();
 
@@ -43,8 +46,15 @@ public class CuratorCRUDInbackgroundSample {
 
 
         /*测试一下create结点*/
-        String s = client.create().creatingParentsIfNeeded().forPath("/node/1", "test".getBytes()); //成功创建,类似于mkdir -p
+        String s = client.create().creatingParentsIfNeeded().forPath("/node/1", "test".getBytes()); //成功创建
         System.out.println(s);
+
+        /*多级目录创建不支持*/
+        s = client.create().creatingParentsIfNeeded().forPath("/node/2/2", "test".getBytes()); //无法成功
+        System.out.println(s);
+
+        Stat stat1 = client.checkExists().forPath("/node/2/2");
+        System.out.println(stat1==null);
 
         /*测试一下 inbackground的是否可以马上获取data*/
         byte[] bytes1 = client.getData().inBackground(new BackgroundCallback() {
