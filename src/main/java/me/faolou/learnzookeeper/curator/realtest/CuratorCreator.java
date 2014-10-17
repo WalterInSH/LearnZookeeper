@@ -19,16 +19,20 @@ public class CuratorCreator {
         CuratorFramework client = CuratorFrameworkFactory.newClient("127.0.0.1:2181", retryPolicy);
         client.start();
 
-        client.create().inBackground().forPath("/TestWatcherNode");
+//        client.create().forPath("/TestWatcherNode");
 
-        sleep(500);
-        client.delete().forPath("/TestWatcherNode");
+        client.create().forPath("/TestWatcherNode/3");
+//        client.create().forPath("/TestWatcherNode/1", "fuck".getBytes());
 
+        client.setData().forPath("/TestWatcherNode/1", "fuck1".getBytes());
 
-        client.create().creatingParentsIfNeeded().inBackground().forPath("/TestListenerNode/1");
+        byte[] bytes = client.getData().forPath("/TestWatcherNode/1");
+        System.out.println(new String(bytes));
 
-        client.delete().forPath("/TestListenerNode/1");
-        client.delete().inBackground().forPath("/TestListenerNode2");
+//        client.create().creatingParentsIfNeeded().inBackground().forPath("/TestListenerNode/1");
+//
+//        client.delete().forPath("/TestListenerNode/1");
+//        client.delete().inBackground().forPath("/TestListenerNode2");
         client.close();
 
     }

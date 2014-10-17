@@ -29,11 +29,13 @@ public class CuratorWatcherSample {
                         event.getPath() + " " +
                         event.getType() + " " +
                         event.getState());
-                client.checkExists().usingWatcher(this).forPath("/TestWatcherNode");
+                client.checkExists().usingWatcher(this).forPath("/TestWatcherNode/1");
+                client.checkExists().usingWatcher(this).forPath("/TestWatcherNode/3");
             }
         };
 
-        client.checkExists().usingWatcher(watcher).forPath("/TestWatcherNode");
+        client.checkExists().usingWatcher(watcher).forPath("/TestWatcherNode/1");
+        client.checkExists().usingWatcher(watcher).forPath("/TestWatcherNode/3");
 
         sleep(50000);
 
