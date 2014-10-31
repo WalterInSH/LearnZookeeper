@@ -5,7 +5,6 @@ import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.api.CuratorWatcher;
 import org.apache.curator.retry.ExponentialBackoffRetry;
-import org.apache.curator.test.TestingServer;
 import org.apache.zookeeper.WatchedEvent;
 
 import static java.lang.Thread.sleep;
@@ -37,7 +36,7 @@ public class CuratorWatcherSample {
         client.checkExists().usingWatcher(watcher).forPath("/TestWatcherNode/1");
         client.checkExists().usingWatcher(watcher).forPath("/TestWatcherNode/3");
 
-        sleep(50000);
+        sleep(5000000);
 
     }
 }
