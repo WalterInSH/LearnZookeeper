@@ -1,13 +1,16 @@
 package me.faolou.learnzookeeper.curator.realtest;
 
+import com.google.common.collect.Maps;
+import me.faolou.learnzookeeper.curator.ByteUtils;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
+import org.apache.zookeeper.data.Stat;
+
+import java.util.Map;
 
 /**
- *
- *
  * @author jack.zhang
  * @since 2014/10/16
  */
@@ -17,28 +20,40 @@ public class CuratorCreator {
         CuratorFramework client = CuratorFrameworkFactory.newClient("127.0.0.1:2181", retryPolicy);
         client.start();
 
-        client.delete().inBackground().forPath("/TestWatcherNode/3");
-        client.delete().inBackground().forPath("/TestWatcherNode/1");
+        Map<String, Integer> map = Maps.newHashMap();
+        for (int i = 0; i < 10; i++) {
+            map.put(String.valueOf(i), i);
+        }
 
-        client.create().creatingParentsIfNeeded().forPath("/TestWatcherNode/3", null); //创建的时候不设置任何值, 保存的data是client local ip
-
-        byte[] bytes1 = client.getData().forPath("/TestWatcherNode/3");
-
-        client.delete().inBackground().forPath("/background/1/1");
-        client.create().creatingParentsIfNeeded().inBackground().forPath("/background/1/1");
-
-        client.create().forPath("/TestWatcherNode/1", "fuck".getBytes());
-        client.setData().forPath("/TestWatcherNode/1", "fuck1".getBytes());
-
-        byte[] bytes = client.getData().forPath("/TestWatcherNode/1");
-        System.out.println(new String(bytes));
+       //模拟创建根节点
+        if (client.checkExists().forPath("/test_data/store") == null) {
+            client.create().creatingParentsIfNeeded().forPath("/test_data/store", ByteUtils.toByteArray(map));
+        }
 
 
-        client.delete().forPath("/TestWatcherNode/3");
-        client.delete().forPath("/TestWatcherNode/1");
-        client.delete().forPath("/TestWatcherNode");
+        //每个根节点插入或者更新数据
+        for (int i = 0; i < 10; i++) {
+            createOrUpdateNode(client, i);
+        }
+
+
+        //模拟一次数据变化
+        client.setData().forPath("/test_data/store", ByteUtils.toByteArray(map));
+        for (int i = 0; i < 10; i++) {
+            createOrUpdateNode(client, i);
+        }
 
         client.close();
 
+    }
+
+    private static void createOrUpdateNode(CuratorFramework client, int i) throws Exception {
+        String path = "/test_data/store/" + String.valueOf(i);
+        Stat stat = client.checkExists().forPath(path);
+        if (stat == null) {
+            client.create().forPath(path, ByteUtils.toByteArray(String.valueOf(i)));
+        } else {
+            client.setData().forPath(path, ByteUtils.toByteArray(String.valueOf(i)));
+        }
     }
 }
