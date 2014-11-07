@@ -24,9 +24,6 @@ public class CuratorCreator {
 
         byte[] bytes1 = client.getData().forPath("/TestWatcherNode/3");
 
-        System.out.println(bytes1);
-
-
         client.delete().inBackground().forPath("/background/1/1");
         client.create().creatingParentsIfNeeded().inBackground().forPath("/background/1/1");
 

@@ -36,6 +36,10 @@ public class CuratorWatcherSample {
         client.checkExists().usingWatcher(watcher).forPath("/TestWatcherNode/1");
         client.checkExists().usingWatcher(watcher).forPath("/TestWatcherNode/3");
 
+        /*子节点创建事件*, 如果子节点的上层结点有一层为空都会报  KeeperException$NoNodeException*/
+        client.getZookeeperClient().getZooKeeper().getChildren("/TestWatcherNode",false);
+
+
         sleep(5000000);
 
     }
