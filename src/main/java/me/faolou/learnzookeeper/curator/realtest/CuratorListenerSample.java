@@ -1,12 +1,15 @@
-package me.faolou.learnzookeeper.curator;
+package me.faolou.learnzookeeper.curator.realtest;
 
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.api.CuratorEvent;
 import org.apache.curator.framework.api.CuratorListener;
+import org.apache.curator.framework.api.CuratorWatcher;
 import org.apache.curator.framework.api.UnhandledErrorListener;
 import org.apache.curator.retry.ExponentialBackoffRetry;
+import org.apache.curator.test.TestingServer;
+import org.apache.zookeeper.WatchedEvent;
 
 import static java.lang.Thread.sleep;
 
@@ -45,11 +48,7 @@ public class CuratorListenerSample {
 
         client.getCuratorListenable().addListener(listener);
         client.getUnhandledErrorListenable().addListener(unhandledErrorListener);
-        client.create().creatingParentsIfNeeded().inBackground().forPath("/TestListenerNode/1");
 
-        client.delete().forPath("/TestListenerNode/1");
-        client.delete().inBackground().forPath("/TestListenerNode2");
-        client.close();
-
+        sleep(50000);
     }
 }
